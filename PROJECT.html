@@ -4,46 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Countdown Timer</title>
-<style>p
-{
+    <style>
+        #timer{ 
     text-align:center;
-    font-size:60px;
-    margin-top: 100px;
-    text-shadow: 0ch;
-    color:black;
-    font-family:Segoe Script;
-}
-img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto; 
-}
-body{
-    background-image: url('https://images.pexels.com/photos/28573198/pexels-photo-28573198/free-photo-of-dramatic-sunset-clouds-over-kozhikode-india.jpeg?auto=compress&cs=tinysrgb&w=600');
+     font-size: 2em;
+     font-family: Century;
+     margin-top: 50px;
+     border: rgba(0, 0, 0, 0.696);
+        }
+        input[type="datetime-local"] {
+            font-size: 1.2em;
+            padding: 8px;
+            font-family: Century;
+            text-align:center;
+            margin-top: 50px;
+            border: rgba(0, 0, 0, 0.696);
+        }
+        body{
+            background-image: url('https://images.pexels.com/photos/17187205/pexels-photo-17187205/free-photo-of-airplane-in-a-purple-sky-with-clouds.jpeg?auto=compress&cs=tinysrgb&w=600/');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-}
-</style>
+    text-align:center;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    margin-top:180px;
+    border: rgba(0, 0, 0, 0.696);
+        }
+
+    </style>
 </head>
 <body>
-    <p id="demo"></p>
-<script>
-        var countdowndate=new Date("jun 20,2031 11:46:53").getTime();
-        var x=setInterval(function(){
-        var now=new Date().getTime();
-        var d=countdowndate-now;
-        var days=Math.floor(d/(1000*60*60*24));
-        var hours=Math.floor(d%(1000*60*60*24)/(1000*60*60));
-        var mins=Math.floor(d%(1000*60*60)/(1000*60));
-        var sec=Math.floor(d%(1000*60)/1000);
-          document.getElementById("demo").innerHTML= days +"d " +hours+ "h " +mins +"m " +sec+ "s !!!";
-        
-if(d<0){
-    clearInterval(x);
-    document.getElementById("demo").innerHTML="EXPIRED"}
-},1000);
 
+    <h1>Countdown Timer</h1>
+    <h4 for="targetDateTime">Select the date and time you want to see:</h4>
+    <input type="datetime-local" id="targetDateTime">
+    <br><br>
+    <button onclick="startCountdown()">Start </button>
+    <button onclick="stopCountdown()">Stop </button>
+
+    <div id="timer">00 Days 00hours:00mins:00secs</div>
+
+    <script>
+        let x
+        let targetDate;
+        function startCountdown() {
+            const targetDateTime = document.getElementById('targetDateTime').value;
+            if (!targetDateTime) {
+                alert("Please select a target date and time.");
+                return;
+            }
+            targetDate = new Date(targetDateTime);
+            if (targetDate <= new Date()) {
+                alert("Please select a future date and time.");
+                return;
+            }
+
+            x= setInterval(updateCountdown, 1000);
+        }
+
+        function updateCountdown() {
+            var now = new Date();
+            var d = targetDate - now;
+
+            if (d<= 0)  {
+                clearInterval(x);
+                document.getElementById('timer').innerHTML = "Time's Up!";
+                return;
+            }
+
+            
+            var days = Math.floor(d / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((d % (1000 * 60)) / 1000);
+
+            document.getElementById('timer').innerHTML = `${days} Days ${pad(hours)} Hours:${pad(minutes)} Mins:${pad(seconds)} Secs`;
+        }
+        function pad(num) {
+            return num < 10 ? "0" + num : num;
+        }
+        function stopCountdown() {
+            clearInterval(x);
+            document.getElementById('timer').innerHTML = "EXPIRED";
+        }
     </script>
+
+</html>
+
 </body>
 </html>
